@@ -2,5 +2,5 @@
     "java.compile.nullAnalysis.mode": "automatic",
     "editor.lineHeight": 1.2,
     "editor.fontLigatures": true,
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "automatic"
 }
