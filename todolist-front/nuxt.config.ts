@@ -6,4 +6,13 @@ export default defineNuxtConfig({
     "~/assets/scss/custom.scss",
     "../node_modules/bootstrap/scss/bootstrap.scss",
   ],
+  runtimeConfig: {
+    public: {
+      apiBase: "http://localhost:8080",
+    },
+  },
+  modules: [
+    '@pinia/nuxt',
+  ]
+
 })

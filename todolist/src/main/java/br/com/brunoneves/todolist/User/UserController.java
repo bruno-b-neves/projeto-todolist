@@ -1,8 +1,11 @@
 package br.com.brunoneves.todolist.User;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +17,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "http://localhost:3000") // Permite requisições do frontend em http://localhost:3000
 public class UserController {
     
     @Autowired
@@ -55,4 +59,23 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userCreated);
     };
+
+    @PostMapping("/login")
+    public ResponseEntity<Object> login(@RequestBody Map<String, String> loginData) {
+        String email = loginData.get("email");
+        String password = loginData.get("password");
+
+        var user = this.userRepository.findByEmail(email);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("E-mail ou senha inválidos!");
+        }
+
+        var passwordVerify = BCrypt.verifyer().verify(password.toCharArray(), user.getPassword());
+        
+        if (!passwordVerify.verified) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("E-mail ou senha inválidos!");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
 }
